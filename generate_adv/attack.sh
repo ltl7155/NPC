@@ -1,0 +1,13 @@
+python attack.py \
+  --attack "ifgsm" \
+  --generate "True" \
+  --model "vgg" \
+  --modelpath "model_vgg_cifar/vgg_seed32_dropout.pkl" \
+  --dataroot "./data/cifar-10/" \
+  --attack_batchsize 1 \
+  --attack_epsilon 8.0 \
+  --attack_alpha 1.0 \
+  --attack_iter 10 \
+  --attack_momentum 1.0 \
+  --savepath "./data/adversarial_samples/Vanilla/pgd/" \
+  --dataset "cifar10"
