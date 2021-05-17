@@ -130,23 +130,12 @@ if __name__=="__main__":
     p="1Cr6GYJHqj0K58QToM7UdtspePOXPTtrz"
     p="1jC4ST7DifndeKzsQEAzCvvItKU-AvBZ8"
     #p="1cVFnWDM-XJNWtY7DAKjAD-RQVQ_D1gtn"
-    #p1="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_cifar-1000_adv_ConvnetCifar_2020-12-19.pkl"
-    #p2="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_cifar-1000_nature_ConvnetCifar_2020-12-19.pkl"
-    #model = mm.get_net("cifar").to(device)
 
-    #p1="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_mnist-1000_adv_ConvnetMnist_2020-12-19.pkl"
-    #p2="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_mnist-1000_nature_ConvnetMnist_2020-12-19.pkl"
+    #model = mm.get_net("cifar").to(device)
     #model = mm.get_net("mnist").to(device)
 #     p="1wMFTzhs2HEoFM3flRcP98yhl6Ab1x4Hi"
-
-
-    #p1="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_svhn_alexnet-1000_adv_AlexNet_2020-12-19.pkl"
-    #p2="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_svhn_alexnet-1000_nature_AlexNet_2020-12-19.pkl"
     #model = mm.get_net("svhn").to(device)
 
-
-    p1="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_cifar_vgg-1000_adv_VGG16_2020-12-19.pkl"
-    p2="/home/malei/wj_code/sadl_torch/nc_diversity_attacks_SADL_manu/assets/manu_results_cifar_vgg-1000_nature_VGG16_2020-12-19.pkl"
     #p1="/tmp/cifar.nature.npz"
     #p2="/tmp/cifar.adv.npz"
     #model = mm.get_net("cifar").to(device)
