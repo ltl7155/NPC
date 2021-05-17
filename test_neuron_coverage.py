@@ -152,8 +152,8 @@ for model_name in ["vgg16_bn"]:
                 covered_10 = covered_10 | covered1
                 covered_100 = covered_100 | covered2 
 #                     print(cover.get_simi(x, y, bucket_m, single_threshold, mode=mode, simi_soft=False))
-            intra[keys] = round(len(covered_10) / total_10, 5)
-            layer_intra[keys] = round(len(covered_100) / total_100, 5)
+            intra[keys] = round(len(covered_10) / total_1, 5)
+            layer_intra[keys] = round(len(covered_100) / total_10, 5)
             print(m_name, intra[keys])
             print(m_name, layer_intra[keys])
         save_filename_10 = "./coverage_results/{}_Our_10_{}".format(mode, m_name)
