@@ -98,8 +98,8 @@ def get_cluster_para(dataset, arch):
 #         sample_threshold = 0.6
 #         cluster_threshold = 0.9
 #         cluster_num = 7
-        sample_threshold = 0.6
-        cluster_threshold = 0.7
+        sample_threshold = 0.7
+        cluster_threshold = 0.9
         cluster_num = 7
         
     elif dataset == "cifar10" and arch == "vgg":
