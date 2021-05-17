@@ -312,9 +312,7 @@ if __name__ == "__main__":
                         if args.dataset == "mnist":
                             upper = [2.0, 2.0, 2.0]
                         elif args.dataset == "imagenet":
-                            upper = [2.0 for i in range(num_layer)] 
-                        else:
-                            upper = [50.0 for i in range(num_layer)] 
+                            upper = [10.0 for i in range(num_layer)] 
                         print("min:", max(target_nma), "max:", max(target_nma))
                         n_bucket = args.n_bucket
 #                         n_bucket = int(args.n_bucket/num_cluster)
