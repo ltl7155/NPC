@@ -3,6 +3,7 @@
 
 
 ### Derive LRP path.
+We use the LRP method provided by https://github.com/moboehle/Pytorch-LRP.
 In LRP_path, we run path_LRP.py to get a path according to the LRP method.
 We set the parameters as follows to get a path of mnist dataset.
 
