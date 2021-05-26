@@ -7,7 +7,7 @@ We use the LRP method provided by https://github.com/moboehle/Pytorch-LRP.
 In LRP_path, we run path_LRP.py to get a path according to the LRP method.
 We set the parameters as follows to get a path of mnist dataset.
 
-`python path_LRP.py --gpu 0 --arc convmnist --threshold 0.8 --dataset mnist --suffix mnist --data_train`
+`cd LRP_path && python path_LRP.py --gpu 0 --arc convmnist --threshold 0.8 --dataset mnist --suffix mnist --data_train`
 
 ### RQ1 Mask Experiment.
 We can run mask_critical_units.py to get inconsistency rate after masking neurons in CDP and NCDP.
