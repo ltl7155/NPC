@@ -3,13 +3,9 @@ import time
 import os
 import sys
 import torch
-<<<<<<< HEAD:lsa_dsa_nma_lib/new_sa_torch.py
 sys.path.append("../LRP_path")
 from .get_a_single_path_wj import getPath
 from .get_all_similarities_wj import sim_paths
-=======
-#sys.path.append("../LRP_path")
->>>>>>> 7bc603b31f75900548885eeeded2b89f2f9d167b:calc_sadl/new_sa_torch.py
 
 from multiprocessing import Pool
 from tqdm import tqdm
@@ -18,11 +14,6 @@ from scipy.stats import gaussian_kde
 
 from .utils_calc import *
 from .torch_modelas_keras import TorchModel as Model 
-<<<<<<< HEAD:lsa_dsa_nma_lib/new_sa_torch.py
-=======
-from .get_a_single_path import getPath
-from .get_all_similarities import sim_paths
->>>>>>> 7bc603b31f75900548885eeeded2b89f2f9d167b:calc_sadl/new_sa_torch.py
 import pickle
 
 import time 

@@ -1,9 +1,10 @@
 import numpy as np
 import sys
 
+sys.path.append("../")
 
-from innvestigator import InnvestigateModel
-from inverter_util import Flatten
+from LRP_path.innvestigator import InnvestigateModel
+from LRP_path.inverter_util import Flatten
 import os
 import torch
 import torch.nn as nn
