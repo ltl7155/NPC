@@ -1,10 +1,10 @@
 # python path_LRP.py --gpu 0 --arc vgg16_bn --threshold 0.7 --dataset imagenet --suffix imagenet --data_train
 import numpy as np
-
-from innvestigator import InnvestigateModel
-from inverter_util import Flatten
 import sys
-sys.path.append("..")
+sys.path.append(".")
+
+from LRP_path.innvestigator import InnvestigateModel
+from LRP_path.inverter_util import Flatten
 import time
 import os
 import torch
@@ -17,6 +17,7 @@ import torch.utils.data as Data
 from models.sa_models import ConvnetMnist
 
 import pickle
+from tqdm import tqdm
 
 
 
@@ -115,7 +116,7 @@ with torch.no_grad():
     
     if args.dataset == "mnist":
         model = ConvnetMnist() 
-        model.load_state_dict(torch.load("../trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+        model.load_state_dict(torch.load("./trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
         
 
     model = model.cuda()
@@ -126,9 +127,9 @@ with torch.no_grad():
                                   beta=.5)
     s_time = time.time()
     if args.data_train:
-        p = "relevs/{}_relev_{}_train.pt".format(args.dataset, args.arc)
+        p = "LRP_path/relevs/{}_relev_{}_train.pt".format(args.dataset, args.arc)
     else:
-        p = "relevs/{}_relev_{}_test.pt".format(args.dataset, args.arc)
+        p = "LRP_path/relevs/{}_relev_{}_test.pt".format(args.dataset, args.arc)
     
     start = -1
     if os.path.exists(p):
@@ -136,7 +137,7 @@ with torch.no_grad():
         print("load relev from {}".format(start))
         
     if not args.useOldRelev:
-        for i, (data, target) in enumerate(data_loader):     
+        for i, (data, target) in tqdm( enumerate(data_loader), desc="innvestigate the relevence by LRP.innvestigate",total=len(data_loader)):     
             if i <= start:
                 print("pass", i)
                 continue
@@ -149,7 +150,7 @@ with torch.no_grad():
                 model_prediction, _ , true_relevance = inn_model.innvestigate(in_tensor=data)
 
                 true_relevance = true_relevance[:]
-                print(true_relevance)
+                #print(true_relevance)
     #             print(true_relevance[0].shape)
 
     #             tmp = torch.sum(true_relevance[0].squeeze(), [1, 2])
@@ -161,7 +162,7 @@ with torch.no_grad():
                         relev[l] = torch.cat((relev[l], true_relevance[l]), 0)
                         
                 torch.save((i, relev), p)
-                torch.save(i, "relevs/{}.pt".format(i))       
+                torch.save(i, "LRP_path/relevs/{}.pt".format(i))       
         print("done")
         print(len(relev[0]))
         
