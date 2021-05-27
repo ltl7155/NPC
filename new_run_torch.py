@@ -19,13 +19,21 @@ CLIP_MIN = -0.5
 CLIP_MAX = 0.5
 
 import pickle
+<<<<<<< HEAD
 
 from lsa_dsa_nma_lib  import  adv_dataloader as dataloader #import  DatasetAdv, save_score_method
+=======
+from calc_sadl import  dataloader #import  DatasetAdv, save_score_method
+>>>>>>> 7bc603b31f75900548885eeeded2b89f2f9d167b
 
 import torch.nn as nn 
 import torch.nn.functional as F 
 import torch 
+<<<<<<< HEAD
 # import utils as dtutil
+=======
+#from calc_sadl import utils as dtutil
+>>>>>>> 7bc603b31f75900548885eeeded2b89f2f9d167b
 
 from lsa_dsa_nma_lib import utils_data 
 from lsa_dsa_nma_lib.utils_data import get_model, get_dataset, get_filelist, get_cluster_para
@@ -138,7 +146,11 @@ if __name__ == "__main__":
     for cla in range(10):
         for clu in range(num_cluster):
             l = "{}_{}".format(cla, clu)
+<<<<<<< HEAD
             picked_samples_fname = "/mnt/mfs/litl/ICSE_CriticalPath/cluster_paths/{}_binary_cluster/num_cluster{}_threshold{}_class{}_cluster{}_paths.pkl".format(args.arch, num_cluster, cluster_threshold,  cla, clu)
+=======
+            picked_samples_fname = "./cluster_paths/{}_binary_cluster/num_cluster{}_threshold{}_class{}_cluster{}_paths.pkl".format(args.arch, num_cluster, cluster_threshold,  cla, clu)
+>>>>>>> 7bc603b31f75900548885eeeded2b89f2f9d167b
             assert os.path.isfile(picked_samples_fname), f"expect the file {picked_samples_fname} "
             with open(picked_samples_fname, "rb") as f:
                 try :
@@ -152,7 +164,11 @@ if __name__ == "__main__":
     for cla in range(10):
         for clu in range(num_cluster):
             l = "{}_{}".format(cla, clu)
+<<<<<<< HEAD
             picked_samples_fname = "/mnt/mfs/litl/ICSE_CriticalPath/cluster_paths/{}_binary_cluster/num_cluster{}_class{}_cluster{}_picked_samples.pkl".format(args.arch, num_cluster, cla, clu)
+=======
+            picked_samples_fname = "./cluster_paths/{}_binary_cluster/num_cluster{}_class{}_cluster{}_picked_samples.pkl".format(args.arch, num_cluster, cla, clu)
+>>>>>>> 7bc603b31f75900548885eeeded2b89f2f9d167b
             assert os.path.isfile(picked_samples_fname), f"expect the file {picked_samples_fname} "
             with open(picked_samples_fname, "rb") as f:
                 try :
@@ -378,4 +394,4 @@ if __name__ == "__main__":
     print("nma:", results_nma,f"file == { os.path.isfile(save_filename_nma) } == {save_filename_nma}")
     print("end time:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time())) )
     
-    
+   
