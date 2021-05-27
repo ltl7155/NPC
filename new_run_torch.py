@@ -7,13 +7,13 @@ import traceback
 from tqdm import tqdm
 from keras.datasets import mnist, cifar10
 import sys
-sys.path.append("..")
+sys.path.append(".")
 #from keras.models import load_model, Model
-from new_sa_torch import fetch_dsa, fetch_lsa, get_sc, fetch_newMetric
-from utils_calc import *
+from calc_sadl.new_sa_torch import fetch_dsa, fetch_lsa, get_sc, fetch_newMetric
+from calc_sadl.utils_calc import *
 import torchvision
 import torchvision.transforms as transforms
-from torch_modelas_keras import  TorchModel
+from calc_sadl.torch_modelas_keras import  TorchModel
 
 CLIP_MIN = -0.5
 CLIP_MAX = 0.5
@@ -26,9 +26,9 @@ import torch.nn.functional as F
 import torch 
 import utils as dtutil
 
-from models.VGG_16 import VGG16
-from vgg import vgg16_bn
-from utils_data import get_model, get_dataset, get_filelist, get_cluster_para
+# from models.VGG_16 import VGG16
+# from models.vgg import vgg16_bn
+from calc_sadl.utils_data import get_model, get_dataset, get_filelist, get_cluster_para
 
 
 device =torch.device("cuda" if torch.cuda.is_available() else "cpu")

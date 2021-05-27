@@ -5,13 +5,13 @@ import argparse
 from tqdm import tqdm
 from keras.datasets import mnist, cifar10
 import sys
-sys.path.append("..")
+# sys.path.append("..")
 #from keras.models import load_model, Model
-from new_sa_torch import fetch_dsa, fetch_lsa, get_sc
-from utils import *
+from .new_sa_torch import fetch_dsa, fetch_lsa, get_sc
+from .utils import *
 import torchvision
 import torchvision.transforms as transforms
-from torch_modelas_keras import  TorchModel
+from .torch_modelas_keras import  TorchModel
 
 import pickle
 
@@ -20,14 +20,14 @@ import torch.nn.functional as F
 import torch 
 from  torchvision.datasets  import utils as dtutil
 
-from models.VGG_16 import VGG16
-from imagenet10Folder import imagenet10Folder
-from vgg import vgg16_bn
+# from models.VGG_16 import VGG16
+# from imagenet10Folder import imagenet10Folder
+# from vgg import vgg16_bn
 # from models.vgg import vgg16_bn
-from  models_old  import ConvnetMnist as NET_MNIST
-from  models_old  import ConvnetCifar as NET_CIFAR10
-from  models_old  import VGG16 as NET_VGG_CIFAR10
-from models.AlexNet_SVHN import AlexNet
+# from  models_old  import ConvnetMnist as NET_MNIST
+# from  models_old  import ConvnetCifar as NET_CIFAR10
+# from  models_old  import VGG16 as NET_VGG_CIFAR10
+# from models.AlexNet_SVHN import AlexNet
 
 def get_model(dataset, arch):
     if dataset == "mnist":
