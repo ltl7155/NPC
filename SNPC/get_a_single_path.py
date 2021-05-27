@@ -12,7 +12,8 @@ import argparse
 import torchvision
 import torchvision.transforms as transforms
 import torch.utils.data as Data
-from models.VGG_16 import VGG16
+
+# from models.VGG_16 import VGG16
 # from models.vgg import vgg16_bn
 from models.sa_models import ConvnetMnist, ConvnetCifar
 

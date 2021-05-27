@@ -1,9 +1,11 @@
 import numpy as np
 import sys
-sys.path.append("LRP_path")
-sys.path.append("calc_sadl")
-from innvestigator import InnvestigateModel
-from inverter_util import Flatten
+# sys.path.append("LRP_path")
+# sys.path.append("calc_sadl")
+sys.path.append(".")
+
+from LRP_path.innvestigator import InnvestigateModel
+from LRP_path.inverter_util import Flatten
 import os
 import torch
 import torch.nn as nn
@@ -13,14 +15,15 @@ import time
 import torchvision
 import torchvision.transforms as transforms
 import torch.utils.data as Data
-from models.VGG_16 import VGG16
-# from models.vgg import vgg16_bn
-from models.AlexNet_SVHN import AlexNet 
-from vgg import vgg16_bn
+
+# from models.VGG_16 import VGG16
+# # from models.vgg import vgg16_bn
+# from models.AlexNet_SVHN import AlexNet 
+# from vgg import vgg16_bn
 
 from models.sa_models import ConvnetMnist, ConvnetCifar
 import pickle
-from get_a_single_path import getPath
+from SNPC.get_a_single_path import getPath
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
@@ -31,50 +34,50 @@ transform_test = transforms.Compose([
     transforms.ToTensor(),
 ])
 mnist_data = torchvision.datasets.MNIST(
-    root='~/.torch', train=False, download=False, transform=transform_test)
+    root='./data/MNIST', train=False, download=False, transform=transform_test)
 mnist_loader = Data.DataLoader(dataset=mnist_data, batch_size=batch_size, shuffle=False)
 
-cifar10_data = torchvision.datasets.CIFAR10(
-        root = './data/cifar-10',
-        train = True,
-        transform = transform_test,
-        download = False)
-cifar10_loader = Data.DataLoader(dataset=cifar10_data, batch_size=batch_size, shuffle=False)
+# cifar10_data = torchvision.datasets.CIFAR10(
+        # root = './data/cifar-10',
+        # train = True,
+        # transform = transform_test,
+        # download = False)
+# cifar10_loader = Data.DataLoader(dataset=cifar10_data, batch_size=batch_size, shuffle=False)
 
 dataset["mnist"] = mnist_data
-dataset["cifar10"] = cifar10_data
+# dataset["cifar10"] = cifar10_data
 
 dataloader["mnist"] = mnist_loader
-dataloader["cifar10"] = cifar10_loader
+# dataloader["cifar10"] = cifar10_loader
 
 models = {}
 
 model_convmnist = ConvnetMnist() 
 model_convmnist.load_state_dict(torch.load("./trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
-
-model_convcifar = ConvnetCifar() 
-model_convcifar.load_state_dict(torch.load("./trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
-
-model_path = "./trained_models/alexnet_lr0.0001_39.pkl"
-model_alexnet=AlexNet()
-checkpoint = torch.load(model_path)
-model_alexnet.load_state_dict(checkpoint)
-
-model_vgg = VGG16(num_classes=10)
-model_path = "./trained_models/model_vgg_cifar/vgg_seed32_dropout.pkl"
-checkpoint = torch.load(model_path)
-model_vgg.load_state_dict(checkpoint)
+#
+# model_convcifar = ConvnetCifar() 
+# model_convcifar.load_state_dict(torch.load("./trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
+#
+# model_path = "./trained_models/alexnet_lr0.0001_39.pkl"
+# model_alexnet=AlexNet()
+# checkpoint = torch.load(model_path)
+# model_alexnet.load_state_dict(checkpoint)
+#
+# model_vgg = VGG16(num_classes=10)
+# model_path = "./trained_models/vgg_seed32_dropout.pkl"
+# checkpoint = torch.load(model_path)
+# model_vgg.load_state_dict(checkpoint)
 
 models["convmnist"] = model_convmnist
-models["convcifar10"] = model_convcifar
-models["vgg"] = model_vgg
-models["alexnet"] = model_alexnet
+# models["convcifar10"] = model_convcifar
+# models["vgg"] = model_vgg
+# models["alexnet"] = model_alexnet
 
 from calc_sadl.utils_data import get_model, get_dataset, get_filelist, get_cluster_para
 
 import torch
-from dataloader import DatasetAdv
-from neuron_coverage import Coverager
+from calc_sadl.dataloader import DatasetAdv
+from SNPC.neuron_coverage import Coverager
 # convmnist 0.8, 4, 0.8
 # convcifar 0.7 7 0.9
 # vgg 0.9 7 0.9

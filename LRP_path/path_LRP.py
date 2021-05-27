@@ -14,10 +14,8 @@ import argparse
 import torchvision
 import torchvision.transforms as transforms
 import torch.utils.data as Data
-from models.VGG_16 import VGG16
-from models.vgg_imagenet import vgg16_bn
-from models.sa_models import ConvnetMnist, ConvnetCifar
-from models.AlexNet_SVHN import AlexNet
+from models.sa_models import ConvnetMnist
+
 import pickle
 
 
@@ -49,48 +47,6 @@ if args.dataset == "mnist":
     data_loader = torch.utils.data.DataLoader(
         testset, batch_size=batch_size, shuffle=False)
 
-if args.dataset == "cifar10":
-    transform_test = transforms.Compose([
-            transforms.ToTensor(),
-#             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-    ])
-
-    test_data = torchvision.datasets.CIFAR10(
-            root = './data/cifar-10',
-            train = args.data_train,
-            transform = transform_test,
-            download = False)
-
-    data_loader = Data.DataLoader(dataset=test_data, batch_size=batch_size, shuffle=False)
-    
-if "SVHN" in args.dataset:
-    transform_test = transforms.Compose([
-            transforms.ToTensor(),
-    ])
-
-    test_data = torchvision.datasets.SVHN(
-            root = '../data/SVHN',
-            split="train" if args.data_train else "test",
-            transform=transform_test,
-            download=True)
-    data_loader = Data.DataLoader(dataset=test_data, batch_size=batch_size, shuffle=False)
-    
-if args.dataset == "imagenet":
-    if args.data_train:
-        valdir = "/mnt/dataset/Image__ILSVRC2012/ILSVRC2012_img_train/train/"
-    else:
-        valdir = "/mnt/mfs/litl/ICSE_CriticalPath/data/ILSVRC2012_img_val/"
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
-    test_dataset = torchvision.datasets.ImageFolder(
-        valdir,
-        transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            normalize,
-        ]))
-    print(len(test_dataset))
-    data_loader = Data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
 if args.attack != "":
  
@@ -161,38 +117,7 @@ with torch.no_grad():
         model = ConvnetMnist() 
         model.load_state_dict(torch.load("../trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
         
-    elif args.dataset == "cifar10" and args.arc == "convcifar10":
-        model = ConvnetCifar() 
-        model.load_state_dict(torch.load("../trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
-        
-    elif args.dataset == "cifar10" and args.arc == "vgg":
-        model = VGG16(num_classes=10)
 
-        model_path = "../trained_models/model_vgg_cifar/vgg_seed32_dropout.pkl"
-        checkpoint = torch.load(model_path)
-        model.load_state_dict(checkpoint)
-        
-    elif args.dataset == "imagenet":
-        model = vgg16_bn(pretrained=True)
-    
-    elif args.dataset == "SVHN":
-        model = AlexNet(num_classes=10)
-        model_path = "../trained_models/alexnet_lr0.0001_39.pkl"
-        checkpoint = torch.load(model_path)
-        model.load_state_dict(checkpoint)
-        
-    elif args.dataset == "SVHN_noDataAug":
-        model = AlexNet(num_classes=10)
-        model_path = "../trained_models/alexnet_lr0.0001_39_noDataAug.pkl"
-        checkpoint = torch.load(model_path)
-        model.load_state_dict(checkpoint)
-        
-    elif args.dataset == "SVHN_PAT":
-        model = AlexNet(num_classes=10)
-        model_path = "../trained_models/PAT/PAT_epoch59_lr0.0001.pkl"
-        checkpoint = torch.load(model_path)
-        model.load_state_dict(checkpoint)
-        
     model = model.cuda()
     model.eval()
                 # Convert to innvestigate model
