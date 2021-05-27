@@ -4,20 +4,23 @@ import os
 import sys
 import torch
 sys.path.append("../LRP_path")
+from .get_a_single_path_wj import getPath
+from .get_all_similarities_wj import sim_paths
 
 from multiprocessing import Pool
 from tqdm import tqdm
 # from keras.models import load_model, Model
 from scipy.stats import gaussian_kde
 
-from utils_calc import *
-from torch_modelas_keras import TorchModel as Model 
-from get_a_single_path import getPath
-from get_all_similarities import sim_paths
+from .utils_calc import *
+from .torch_modelas_keras import TorchModel as Model 
 import pickle
 
-def _aggr_output(x):
-    return [np.mean(x[..., j]) for j in range(x.shape[-1])]
+import time 
+import traceback 
+
+# def _aggr_output(x):
+    # return [np.mean(x[..., j]) for j in range(x.shape[-1])]
 
 def _get_saved_path(base_path, dataset, arch, dtype, layer_names, fileid=None):
     """Determine saved path of ats and pred
@@ -58,7 +61,7 @@ def get_ats(
     batch_size=128,
     is_classification=True,
     num_classes=10,
-    num_proc=1,
+    num_proc=32,
 ):
     """Extract activation traces of dataset from model.
 
@@ -85,56 +88,75 @@ def get_ats(
         layer_names=layer_names
     )
 
+    len_dataset= None 
+    if type(dataset)==np.ndarray or torch.is_tensor(dataset) or "TensorDataset" in str(type(dataset)):
+        len_dataset=len(dataset)
+    elif "DataLoader" in str(type(dataset)):
+        len_dataset=len(dataset.dataset)
+    else :
+        raise Exception(f"unkwnow type={type(dataset)}")
+    
     prefix = info("[" + name + "] ")
     if is_classification:
-        p = Pool(num_proc)
 #         print(prefix + "Model serving", type(dataset), dataset.shape)
         print(prefix + "Model serving", type(dataset))
         pred = model.predict_classes(dataset, batch_size=batch_size, verbose=1)
         
-        if len(layer_names) == 1:
-            featuremap = temp_model.predict(dataset, batch_size=batch_size, verbose=1)
-
-            layer_outputs = [
-                featuremap
-            ]
-        else:
-            layer_outputs = temp_model.predict(
-                dataset, batch_size=batch_size, verbose=1
-            )
-       
+        # if len(layer_names) == 1:
+            # featuremap = temp_model.predict(dataset, batch_size=batch_size, verbose=1)
+            #
+            # layer_outputs = [
+                # featuremap
+            # ]
+        # else:
+        layer_outputs = temp_model.predict_v2(
+            dataset, batch_size=batch_size, verbose=1
+        )
+   
         ats = None
+        
+        assert len( layer_outputs[0]) ==len_dataset ,f"the {len_dataset} == layout.batch_size {len( layer_outputs[0])} "
+        assert len( layer_outputs) == len(layer_names) ,f"the layer_names {len(layer_names)} == layout {len( layer_outputs)} "
 
-        for layer_name, layer_output in zip(layer_names, layer_outputs):
-#             print("Layer: " + layer_name)
-            if layer_output[0].ndim == 3:
-                # For convolutional layers
-                print("calculating mean of feature maps.......")
-                ret_list = [] 
-                for i in  range(len(dataset)):
-                    one_out = _aggr_output(layer_output[i]) 
-                    ret_list.append(one_out)
-                    
-                layer_matrix = np.array(ret_list)
-                
-                #layer_matrix = np.array(
-                #    p.map(_aggr_output, [layer_output[i] for i in range(len(dataset))])
-                #)
-                print("\tfinished!")
-            else:
-                layer_matrix = np.array(layer_output)
+        try :
+            # p = Pool(num_proc)
             
-#             print ("layer_matrix--->", layer_matrix.shape, layer_matrix.dtype)
-            if ats is None:
-                ats = layer_matrix
-            else:
-                ats = np.append(ats, layer_matrix, axis=1)
-                layer_matrix = None
-# 
+            for layer_name, layer_output in zip(layer_names, layer_outputs):
+    #             print("Layer: " + layer_name)
+                print ("calc....layer_output for ",layer_name,)
+                if type(layer_output) !=dict :
+                    print (layer_output.shape)
+                
+                assert type(layer_output) ==np.ndarray or torch.is_tensor(layer_output),f"expect a tensor[np/t], get {type(layer_output)}"
+                    
+                if layer_output.ndim == 3:
+                    # For convolutional layers
+                    print("calculating mean of feature maps.......",layer_output.shape,"layer_output.shape")
+                    # ret_list = [] 
+                    # single_size = len_dataset#len(layer_output[0])
+                    #
+                    layer_matrix =layer_output # np.mean(layer_output,axis=(1,2))
+                    
+                elif layer_output.ndim<4:
+                    layer_matrix = layer_output#np.array(layer_output)
+                else :
+                    raise Exception (f"unknow, expect layer_output.dim<=4, but get {layer_output.shape}")
+    #             print ("layer_matrix--->", layer_matrix.shape, layer_matrix.dtype)
+                if ats is None:
+                    ats = layer_matrix
+                else:
+                    ats = np.append(ats, layer_matrix, axis=1)
+                    layer_matrix = None
+        except Exception as ex :
+            print (ex)
+            traceback.print_exc()
+        finally:
+            print("\tfinished!")
+            # p.close()
+        
     if save_path is not None:
         np.save(save_path[0], ats)
         np.save(save_path[1], pred)
-        p.close()
         
     return ats, pred
 
@@ -419,7 +441,6 @@ def fetch_newMetric(model, ori_model, x_train, x_target, y_test, sample_threshol
         with open(saved_target_path[2], 'rb') as handle:
             path_x = pickle.load(handle)
         t = 0
-
     else:
 #         print("x_targetx_target", x_target.size())
 #         print("x_targetx_target", y_test.size())
@@ -466,6 +487,7 @@ def fetch_newMetric(model, ori_model, x_train, x_target, y_test, sample_threshol
     dis_all = []
     clu_all = []
     cla_all = []
+    
 #     print("getting distance......")
     for i in tqdm(range(len(path_x))):
         p = path_x[i]

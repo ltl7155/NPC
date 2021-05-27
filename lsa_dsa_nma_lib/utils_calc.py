@@ -205,9 +205,9 @@ def format_time(seconds):
 
 
 
-from prettytable import PrettyTable
 
 def count_parameters(model):
+    from prettytable import PrettyTable
     table = PrettyTable(["Modules", "Parameters"])
     total_params = 0
     for name, parameter in model.named_parameters():
