@@ -33,7 +33,7 @@ from models.sa_models import ConvnetMnist, ConvnetCifar
 # from AlexNet_SVHN import AlexNet
 # from vgg import vgg16_bn
 
-from sa_models import mask_ConvnetMnist, mask_ConvnetCifar
+from models.sa_models import mask_ConvnetMnist, mask_ConvnetCifar
 # from model_mask_vgg import mask_VGG16 # imagenet's vgg
 # from mask_vgg import mask_vgg16_bn
 # from mask_AlexNet_SVHN import mask_AlexNet
@@ -96,7 +96,7 @@ if args.dataset == "mnist":
 #         transforms.Normalize((0.1307,), (0.3081,)),
     ])
     dataset = torchvision.datasets.MNIST(
-        root='./data/MNIST', train=args.data_train, download=True, transform=transform_test)
+        root='~/.torch/', train=args.data_train, download=True, transform=transform_test)
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=batch_size, shuffle=False)
 

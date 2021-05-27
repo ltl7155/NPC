@@ -15,6 +15,7 @@ import torch.utils.data as Data
 import torch.nn.functional as F
 import argparse
 
+from tqdm import tqdm 
 # from imagenet10Folder import imagenet10Folder 
 #
 # from models.VGG_16 import VGG16
@@ -56,7 +57,7 @@ if args.dataset == "mnist":
 #         transforms.Normalize((0.1307,), (0.3081,)),
     ])
     dataset = torchvision.datasets.MNIST(
-        root='./data/MNIST', train=args.data_train, download=True, transform=transform_test)
+        root='~/.torch/', train=args.data_train, download=True, transform=transform_test)
 #     data_loader = torch.utils.data.DataLoader(
 #         testset, batch_size=batch_size, shuffle=False)
 
@@ -206,7 +207,7 @@ for index in tqdm(range(len(dataset)),desc="mask each seed of dataset ",total=le
                 if ori_cla == test_y.item():
                     continue
 
-            print("image index:", index)
+#            print("image index:", index)
 
             picked_neuron_nums = []
             for i in range(len(paths[index])):
@@ -215,7 +216,7 @@ for index in tqdm(range(len(dataset)),desc="mask each seed of dataset ",total=le
                     l = 1
                 picked_neuron_nums.append(l)
 
-            print(picked_neuron_nums)
+#            print(picked_neuron_nums)
 
             for t in range(grids):
                 path = []
@@ -250,7 +251,7 @@ for index in tqdm(range(len(dataset)),desc="mask each seed of dataset ",total=le
                         prob_count[t] += abs(ori_prob - mask_prob)
                         num[t] += 1
         #         print(ori_prob)
-                if num[t] != 0:  
+                if num[t] != 0 and index%1000==0:  
                     print("\t per:", t)
                     print("\t count:", right_count[t]/num[t])
                     print("\t prob:", prob_count[t]/num[t])
