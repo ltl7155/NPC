@@ -5,10 +5,10 @@ import argparse
 from tqdm import tqdm
 from keras.datasets import mnist, cifar10
 import sys
-# sys.path.append("..")
+sys.path.append("..")
 #from keras.models import load_model, Model
 from .new_sa_torch import fetch_dsa, fetch_lsa, get_sc
-from .utils import *
+#from .utils import *
 import torchvision
 import torchvision.transforms as transforms
 from .torch_modelas_keras import  TorchModel
@@ -24,7 +24,7 @@ from  torchvision.datasets  import utils as dtutil
 # from imagenet10Folder import imagenet10Folder
 # from vgg import vgg16_bn
 # from models.vgg import vgg16_bn
-# from  models_old  import ConvnetMnist as NET_MNIST
+from models.sa_models   import ConvnetMnist as NET_MNIST
 # from  models_old  import ConvnetCifar as NET_CIFAR10
 # from  models_old  import VGG16 as NET_VGG_CIFAR10
 # from models.AlexNet_SVHN import AlexNet
@@ -32,40 +32,40 @@ from  torchvision.datasets  import utils as dtutil
 def get_model(dataset, arch):
     if dataset == "mnist":
         model = NET_MNIST() 
-        model.load_state_dict(torch.load("../trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+        model.load_state_dict(torch.load("./trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
         
     elif dataset == "cifar10" and arch == "convcifar10":
         model = NET_CIFAR10() 
-        model.load_state_dict(torch.load("../trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
+        model.load_state_dict(torch.load("./trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
       
     elif dataset == "cifar10" and arch == "vgg":
         model = NET_VGG_CIFAR10(num_classes=10)
 
-        model_path = "../trained_models/model_vgg_cifar/vgg_seed32_dropout.pkl"
+        model_path = "./trained_models/model_vgg_cifar/vgg_seed32_dropout.pkl"
         checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint)
         
     elif dataset == "imagenet10" or dataset == "imagenet":
         model = vgg16_bn(num_classes=10)
-        model_path = "../trained_models/vgg16_bn_lr0.0001_49_imagenet_train_layer-1_withDataAugment.pkl"
+        model_path = "./trained_models/vgg16_bn_lr0.0001_49_imagenet_train_layer-1_withDataAugment.pkl"
         checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint)
     
     elif dataset == "SVHN":
         model = AlexNet(num_classes=10)
-        model_path = "../trained_models/alexnet_lr0.0001_39.pkl"
+        model_path = "./trained_models/alexnet_lr0.0001_39.pkl"
         checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint)
         
     elif dataset == "SVHN_noDataAug":
         model = AlexNet(num_classes=10)
-        model_path = "../trained_models/alexnet_lr0.0001_39_noDataAug.pkl"
+        model_path = "./trained_models/alexnet_lr0.0001_39_noDataAug.pkl"
         checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint)
         
     elif dataset == "SVHN_PAT":
         model = AlexNet(num_classes=10)
-        model_path = "../trained_models/PAT/PAT_epoch59_lr0.0001.pkl"
+        model_path = "./trained_models/PAT/PAT_epoch59_lr0.0001.pkl"
         checkpoint = torch.load(model_path)
         model.load_state_dict(checkpoint)
         

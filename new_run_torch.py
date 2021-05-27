@@ -19,12 +19,12 @@ CLIP_MIN = -0.5
 CLIP_MAX = 0.5
 
 import pickle
-import  dataloader #import  DatasetAdv, save_score_method
+from calc_sadl import  dataloader #import  DatasetAdv, save_score_method
 
 import torch.nn as nn 
 import torch.nn.functional as F 
 import torch 
-import utils as dtutil
+#from calc_sadl import utils as dtutil
 
 # from models.VGG_16 import VGG16
 # from models.vgg import vgg16_bn
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     for cla in range(10):
         for clu in range(num_cluster):
             l = "{}_{}".format(cla, clu)
-            picked_samples_fname = "../cluster_paths/{}_binary_cluster/num_cluster{}_threshold{}_class{}_cluster{}_paths.pkl".format(args.arch, num_cluster, cluster_threshold,  cla, clu)
+            picked_samples_fname = "./cluster_paths/{}_binary_cluster/num_cluster{}_threshold{}_class{}_cluster{}_paths.pkl".format(args.arch, num_cluster, cluster_threshold,  cla, clu)
             assert os.path.isfile(picked_samples_fname), f"expect the file {picked_samples_fname} "
             with open(picked_samples_fname, "rb") as f:
                 try :
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     for cla in range(10):
         for clu in range(num_cluster):
             l = "{}_{}".format(cla, clu)
-            picked_samples_fname = "../cluster_paths/{}_binary_cluster/num_cluster{}_class{}_cluster{}_picked_samples.pkl".format(args.arch, num_cluster, cla, clu)
+            picked_samples_fname = "./cluster_paths/{}_binary_cluster/num_cluster{}_class{}_cluster{}_picked_samples.pkl".format(args.arch, num_cluster, cla, clu)
             assert os.path.isfile(picked_samples_fname), f"expect the file {picked_samples_fname} "
             with open(picked_samples_fname, "rb") as f:
                 try :
@@ -352,4 +352,4 @@ if __name__ == "__main__":
     print("nma:", results_nma,f"file == { os.path.isfile(save_filename_nma) } == {save_filename_nma}")
     print("end time:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(time.time())) )
     
-    
+   

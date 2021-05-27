@@ -19,14 +19,14 @@ class DatasetAdv(Dataset):
         print (f"start download {new_path}")
         print ("======="*8)
         os.makedirs(root,exist_ok=True)
-        #dtutil.download_file_from_google_drive(file_id=file_id, 
-        #                                       root=root, 
-        #                                       filename=f"adv_data_{file_id}.pkl")
+        dtutil.download_file_from_google_drive(file_id=file_id, 
+                                               root=root, 
+                                               filename=f"adv_data_{file_id}.pkl")
         return os.path.join(os.path.abspath(root),f"adv_data_{file_id}.pkl")
     #x["layer"],x["regularization_weight"],x["epsilon"]
     def __init__(self,file_id_or_local_path):
         local_path =file_id_or_local_path if  "/" in file_id_or_local_path else ""
-        print ("local_path....",local_path)
+        print ("local_path....",local_path,os.path.isfile(local_path))
         if not os.path.isfile(local_path):
             local_path=self.donwload_(file_id=file_id_or_local_path)
         

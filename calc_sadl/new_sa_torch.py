@@ -3,17 +3,17 @@ import time
 import os
 import sys
 import torch
-sys.path.append("../LRP_path")
+#sys.path.append("../LRP_path")
 
 from multiprocessing import Pool
 from tqdm import tqdm
 # from keras.models import load_model, Model
 from scipy.stats import gaussian_kde
 
-from utils_calc import *
-from torch_modelas_keras import TorchModel as Model 
-from get_a_single_path import getPath
-from get_all_similarities import sim_paths
+from .utils_calc import *
+from .torch_modelas_keras import TorchModel as Model 
+from .get_a_single_path import getPath
+from .get_all_similarities import sim_paths
 import pickle
 
 def _aggr_output(x):

@@ -270,7 +270,7 @@ class TorchModel(nn.Module):
                         else :
                             v =  [v]
 #                     print(logits_out_one)
-                    logits_out_list.update({k:v})
+                        logits_out_list.update({k:v})
                 for k,v in logits_out_list.items():
                     v=np.concatenate(v)
                     logits_out_list[k]=v
