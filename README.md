@@ -27,6 +27,6 @@ We can run cluster_three_level_mask.py to cluster theses paths and derive the ab
 ### RQ3 SNPC,LSA,DSA,ANPC
 In test_neuron_coverage.py, we inplemented the SNPC. And in calc_sadl, we can run new_run_torch.py to get the LSA,DSA,ANPC metric.
 
-`batch_size=64  python new_run_torch.py -nma `
-Or
-`batch_size=64  python new_run_torch.py -lsa -dsa  --last_layer`
+`batch_size=64  python new_run_torch.py -nma ` </br>
+Or</br>
+`batch_size=64  python new_run_torch.py -lsa -dsa  --last_layer`</br>
