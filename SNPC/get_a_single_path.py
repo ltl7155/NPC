@@ -3,8 +3,8 @@ import sys
 
 sys.path.append("../")
 
-from LRP_path.innvestigator import InnvestigateModel
-from LRP_path.inverter_util import Flatten
+from LSA_DSA_ANPC_lib.LRP_path.innvestigator import InnvestigateModel
+from LSA_DSA_ANPC_lib.LRP_path.inverter_util import Flatten
 import os
 import torch
 import torch.nn as nn

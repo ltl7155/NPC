@@ -5,7 +5,7 @@ import argparse
 from tqdm import tqdm
 from keras.datasets import mnist, cifar10
 import sys
-# sys.path.append("..")
+sys.path.append("..")
 #from keras.models import load_model, Model
 # from new_sa_torch import fetch_dsa, fetch_lsa, get_sc
 # from utils import *
@@ -21,7 +21,7 @@ import torch
 from  torchvision.datasets  import utils as dtutil
 
 import time 
-import  deephunter.models  as models 
+# import  deephunter.models  as models 
 # from models.VGG_16 import VGG16
 # from imagenet10Folder import imagenet10Folder
 # from vgg import vgg16_bn
@@ -31,11 +31,12 @@ import  deephunter.models  as models
 # from  models_old  import VGG16 as NET_VGG_CIFAR10
 # from models.AlexNet_SVHN import AlexNet
 
+from deephunter.models import get_net
 #dict_arch2deephunter ={"convmnist":"covnet","convcifar10":"covnet", }
 def get_model(dataset, arch):
 #    arch2 = dict_arch2deephunter.get(arch,arch)
-
-    model  = models.get_net(name=arch)
+    model  = get_net(name=arch,dt_name=dataset)
+    
    
     if arch == "convmnist":
         layer_names = ["0/relu1", "1/relu2", "2/relu3"]
@@ -121,7 +122,12 @@ def get_dataset(dataset):
 
         import torchvision .datasets as vdt
         import torchvision .transforms as vdf
-        
+        '''
+        this is intranet path, if you are interest ,please contact us by github
+        '''
+        raise Exception("not support on this version")
+    
+    
         from deephunter.datasets import imagenet10Folder
         # from torchvision.datasets import ImageFolder
 
@@ -175,8 +181,10 @@ def get_filelist():
     return fileid_list.file_id_list
 
 def get_adv_dataset(attack_mode, dataset, arch, attack_epi):
-    data_root = f"/mnt/mfs/litl/ICSE_CriticalPath/adv_samples/adv_{attack_mode}_{dataset}_{arch}_samples_eps{attack_epi}.npy"
-    label_root = f"/mnt/mfs/litl/ICSE_CriticalPath/adv_samples/adv_{attack_mode}_{dataset}_{arch}_labels_eps{attack_epi}.npy"
+    cur_dir = os.path.dirname( os.path.abspath(__file__) )
+    
+    data_root = f"{cur_dir}/../adv_samples/adv_{attack_mode}_{dataset}_{arch}_samples_eps{attack_epi}.npy"
+    label_root = f"{cur_dir}/../adv_{attack_mode}_{dataset}_{arch}_labels_eps{attack_epi}.npy"
 
     def get_adv(x, y):
         test_data = torch.from_numpy(x).float()

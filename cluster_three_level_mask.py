@@ -29,11 +29,11 @@ import torch.utils.data as Data
 from sklearn.cluster import KMeans
 import numpy as np
 import argparse
-from models.sa_models import ConvnetMnist, ConvnetCifar
+# from models.sa_models import ConvnetMnist, ConvnetCifar
 # from AlexNet_SVHN import AlexNet
 # from vgg import vgg16_bn
 
-from models.sa_models import mask_ConvnetMnist, mask_ConvnetCifar
+from deephunter.models import get_net,get_masked_net #  .sa_models import mask_ConvnetMnist, mask_ConvnetCifar
 # from model_mask_vgg import mask_VGG16 # imagenet's vgg
 # from mask_vgg import mask_vgg16_bn
 # from mask_AlexNet_SVHN import mask_AlexNet
@@ -171,10 +171,13 @@ if args.attack != "":
     data_loader = Data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False)
     
 if args.dataset == "mnist":
-    ori_model = ConvnetMnist() 
-    ori_model.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
-    net = mask_ConvnetMnist() 
-    net.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+    # ori_model = ConvnetMnist() 
+    # ori_model.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+    # net = mask_ConvnetMnist() 
+    # net.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+    
+    ori_model =get_net(name="mnist")
+    net =get_masked_net(name="mnist")
 
 # elif args.dataset == "cifar10" and args.arc == "convcifar10":
     # ori_model = ConvnetCifar() 
@@ -250,7 +253,7 @@ else:
     for step, (val_x, val_y) in tqdm(enumerate(data_loader),total=len(data_loader)):
         val_x = val_x.cuda()
         start_index = end_index
-        print("step:", step)
+        # print("step:", step)
         val_y = val_y
         val_output = ori_model(val_x)
         _, val_pred_y = val_output.max(1)
