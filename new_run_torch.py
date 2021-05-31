@@ -102,7 +102,7 @@ if __name__ == "__main__":
     #parser.add_argument('--dataset', type=str, default="mnist")
     #parser.add_argument("-attack",  help="a", type=str, default="pgd")
     
-    parser.add_argument("-fid",  help="file", type=str, default=None)
+    parser.add_argument("-fid",  help="file", type=str, default="1v_YWYe7s2MlL_ZyRnixlxe1xdOIDXwdL")
 
     args = parser.parse_args()
     print ("------"*20)
