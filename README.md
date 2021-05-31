@@ -1,17 +1,14 @@
-### Overview of NPC ( Under construction, please wait util May30 2021 ):
+### Overview of NPC :
 ![image](https://user-images.githubusercontent.com/26337247/118444619-f491d800-b71f-11eb-8947-a7deb62db2da.png)
 
 
 ### Derive LRP path.
-We use the LRP method provided by https://github.com/moboehle/Pytorch-LRP.
-In LRP_path, we run path_LRP.py to get a path according to the LRP method.
-We set the parameters as follows to get a path of mnist dataset.
-`python trained_models/download.py --file_id 1ED01iWDC13vWdr2_217HiNyuhWiBpMaf --save_name LRP_path/mnist_convmnist_lrp_path_threshold0.8_train.pkl`
+first, please download some pretrained weight, data and seed case from drive.google.com by our scripts. </br>
+or if your do want to reproduce instead of downloading, please refer to the [full_version.md](./fullversion.md)
 
+* download MNIST's model's weight (4.7 Mb), MNIST dataset (53 Mb), one seed-case (36Mb)</br>
 
-or to reproduce instead of download ours  
-
-` python path_LRP.py --gpu 0 --arc convmnist --threshold 0.8 --dataset mnist --suffix mnist --data_train`
+`cd  data &&  python download.py download_weight_mnist download_datasets_mnist download_seed_mnist && cd .. `
 
 
 ### RQ1 Mask Experiment.
