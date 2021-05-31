@@ -29,4 +29,4 @@ In calc_NPC.py, we inplemented the SNPC. And in calc_sadl, we can run new_run_to
 * LSA(LSC) DSA(DSC) </br>
 `batch_size=64  python new_run_torch.py -lsa -dsa  --last_layer`</br>
 * SNPC </br>
-`batch_size=64  python calc_NPC.py `</br>
+`batch_size=64  python calc_SNPC.py `</br>
