@@ -1,9 +1,10 @@
 import numpy as np
 import sys
-sys.path.append("LRP_path")
 
-from innvestigator import InnvestigateModel
-from inverter_util import Flatten
+sys.path.append("../")
+
+from LRP_path.innvestigator import InnvestigateModel
+from LRP_path.inverter_util import Flatten
 import os
 import torch
 import torch.nn as nn
@@ -12,10 +13,9 @@ import argparse
 import torchvision
 import torchvision.transforms as transforms
 import torch.utils.data as Data
-
-# from models.VGG_16 import VGG16
+#from models.VGG_16 import VGG16
 # from models.vgg import vgg16_bn
-from models.sa_models import ConvnetMnist, ConvnetCifar
+#from models.sa_models import ConvnetMnist, ConvnetCifar
 
 import pickle
 
