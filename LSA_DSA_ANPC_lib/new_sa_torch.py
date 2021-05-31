@@ -3,9 +3,9 @@ import time
 import os
 import sys
 import torch
-sys.path.append("../LRP_path")
-from .get_a_single_path_wj import getPath
-from .get_all_similarities_wj import sim_paths
+# sys.path.append("../LRP_path")
+from .get_a_single_path import getPath
+from .get_all_similarities import sim_paths
 
 from multiprocessing import Pool
 from tqdm import tqdm

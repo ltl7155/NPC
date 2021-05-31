@@ -175,10 +175,10 @@ def get_dataset(dataset):
 
 
 
-def get_filelist():
-    from deephunter.datareader import fileid_list
-    
-    return fileid_list.file_id_list
+# def get_filelist():
+    # from deephunter.datareader import fileid_list
+    #
+    # return fileid_list.file_id_list
 
 def get_adv_dataset(attack_mode, dataset, arch, attack_epi):
     cur_dir = os.path.dirname( os.path.abspath(__file__) )

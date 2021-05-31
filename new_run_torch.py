@@ -9,25 +9,26 @@ import os,sys
 sys.path.append(".")
 # sys.path.append("../")
 #from keras.models import load_model, Model
-from lsa_dsa_nma_lib.new_sa_torch import fetch_dsa, fetch_lsa, get_sc, fetch_newMetric
-from lsa_dsa_nma_lib import utils_calc #import *
+from LSA_DSA_ANPC_lib.new_sa_torch import fetch_dsa, fetch_lsa, get_sc, fetch_newMetric
+from LSA_DSA_ANPC_lib import utils_calc #import *
+from data.manual_seed_RQ3 import rq3_fileid_list as file_id_list
 import torchvision
 import torchvision.transforms as transforms
-from lsa_dsa_nma_lib.torch_modelas_keras import  TorchModel
+from LSA_DSA_ANPC_lib.torch_modelas_keras import  TorchModel
 
 CLIP_MIN = -0.5
 CLIP_MAX = 0.5
 
 import pickle
 
-from lsa_dsa_nma_lib  import  adv_dataloader as dataloader #import  DatasetAdv, save_score_method
+from deephunter.datasets  import  manu_datasets_reader as dataloader #import  DatasetAdv, save_score_method
 
 import torch.nn as nn 
 import torch.nn.functional as F 
 import torch 
 
-from lsa_dsa_nma_lib import utils_data 
-from lsa_dsa_nma_lib.utils_data import get_model, get_dataset, get_filelist, get_cluster_para
+from LSA_DSA_ANPC_lib import utils_data 
+from LSA_DSA_ANPC_lib.utils_data import get_model, get_dataset, get_cluster_para
 
 
 device =torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -112,7 +113,7 @@ if __name__ == "__main__":
     # os.environ["CUDA_VISIBLE_DEVICES"] =str( int(args.gpu) )
 
 
-    file_id_list = utils_data.get_filelist()
+    #file_id_list = utils_data.get_filelist()
     fid = args.fid 
     map_dataset = file_id_list[fid]["dataset"]
     map_arg = file_id_list[fid]["arch"]
@@ -208,7 +209,7 @@ if __name__ == "__main__":
         setattr(args,"nma",False)
 
     # adv_dt = dataloader.DatasetAdv(file_id_or_local_path=data_fileid)
-    adv_dt = dataloader.get_dataloader(file_id_or_local_path=data_fileid)
+    adv_dt = dataloader.DatasetAdv(file_id_or_local_path=data_fileid)
 
 
     n_bucket = args.n_bucket * num_cluster
