@@ -19,8 +19,8 @@ from deephunter.datasets import manu_datasets_reader as dataloader
 from deephunter.models import get_net  
 from data  import manual_seed_RQ3  as gdrive_fileids 
 
-from SNPC.get_a_single_path import getPath
-from SNPC.neuron_coverage import Coverager
+from LSA_DSA_ANPC_lib.get_a_single_path import getPath
+from LSA_DSA_ANPC_lib.neuron_coverage import Coverager
 from LSA_DSA_ANPC_lib import utils_data as calc_sadl_utils_data
 # convmnist 0.8, 4, 0.8
 # convcifar 0.7 7 0.9

@@ -10,6 +10,7 @@ warning:
 import torchvision.datasets.utils as dtutil
 from tqdm import tqdm 
 import os 
+from manual_seed_RQ3 import rq3_fileid_list
 
 file_id_list={
     "covnet_mnist":("1rUzzcvG7R55TvJVpdOaqgV3OB0kRznWA","mnist_mixup_acc_99.28_ckpt.pth"),
@@ -26,6 +27,9 @@ file_id_list={
 file_id_list_datasets ={
     "datasets":(
          "1vmESmVgWiYe5vYarZIPN7oz-6pcovvMG", "dataset_mnist_cifar10_svhn_10classimagenet.tar"),
+    "datasets_mnist":(
+         "1myDwhi9QlVfBZuw3-Ac8D_nNbgYYx7Gc", "dataset_mnist.zip"),
+    
     }
 
 def download_func(file_id,
@@ -41,7 +45,8 @@ def download_func(file_id,
     if extract :
         from_path = os.path.join(cache_dir,final_name)
         to_path = os.path.join(cache_dir)
-        dtutil.extract_archive(from_path, to_path, remove_finished=True)
+        print ("from -->to ",from_path,to_path)
+        dtutil.extract_archive(from_path, to_path, remove_finished=False)
 
 import argparse 
 
@@ -50,12 +55,26 @@ parser.add_argument('--download_weight', action='store_true')
 parser.add_argument('--download_datasets', action='store_true')
 parser.add_argument('--file_id',"-fid", type=str, default=None)
 parser.add_argument('--save_name', type=str, default="./trained_models")
+
+parser.add_argument('--download_mnist_example', action='store_true')
+
 args = parser.parse_args()
 
 
 
 if __name__=="__main__":
     
+    if args.download_mnist_example :
+        cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),"./")
+        file_save_name="mnist_example.tar"
+        file_id = "1VTf8QUx8busOVZKQ29f7TtK2brRD6oER"
+        
+        download_func(file_id=file_id,
+                      final_name=file_save_name,
+                      cache_dir=cache_dir,extract=True)
+    
+    
+
     if args.download_weight :
         cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),"./trained_models")
         # cache_dir= os.path.expanduser("./trained_models")
@@ -63,8 +82,8 @@ if __name__=="__main__":
             download_func(file_id=file_id,final_name=file_save_name,cache_dir=cache_dir)
             print (f"finished download of {name}")
     if args.download_datasets :
-        cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),"./data_files")
         # cache_dir= os.path.expanduser("./trained_models")
+        cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),"./")
         for name,(file_id,file_save_name) in tqdm(file_id_list_datasets.items()):
             download_func(file_id=file_id,final_name=file_save_name,cache_dir=cache_dir,extract=True)
             print (f"finished download of {name}")
