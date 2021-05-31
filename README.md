@@ -8,7 +8,7 @@ or if your do want to reproduce instead of downloading, please refer to the [ful
 
 * download MNIST's model's weight (4.7 Mb), MNIST dataset (53 Mb), one seed-case (36Mb)</br>
 
-`cd  data &&  python download.py download_weight_mnist download_datasets_mnist download_seed_mnist && cd .. `
+`cd  data &&  python download.py --download_mnist_example  && cd .. `
 
 
 ### RQ1 Mask Experiment.
