@@ -16,8 +16,7 @@ import torch
 import numpy as np
 import torchvision
 import sys
-sys.path.append("models")
-from VGG_16 import VGG16
+# sys.path.append("models")
 import os
 import torchvision.transforms as transforms
 
@@ -30,13 +29,17 @@ import torch.utils.data as Data
 from sklearn.cluster import KMeans
 import numpy as np
 import argparse
-from model_mask_vgg import mask_VGG16
-from sa_models import ConvnetMnist, ConvnetCifar, mask_ConvnetMnist, mask_ConvnetCifar
-from AlexNet_SVHN import AlexNet
-from mask_AlexNet_SVHN import mask_AlexNet
-from vgg import vgg16_bn
-from mask_vgg import mask_vgg16_bn
-from imagenet10Folder import imagenet10Folder 
+# from models.sa_models import ConvnetMnist, ConvnetCifar
+# from AlexNet_SVHN import AlexNet
+# from vgg import vgg16_bn
+
+from deephunter.models import get_net,get_masked_net #  .sa_models import mask_ConvnetMnist, mask_ConvnetCifar
+# from model_mask_vgg import mask_VGG16 # imagenet's vgg
+# from mask_vgg import mask_vgg16_bn
+# from mask_AlexNet_SVHN import mask_AlexNet
+
+
+# from imagenet10Folder import imagenet10Folder # dataset for imagenet
 
 parser = argparse.ArgumentParser(description='model interpretation')
 parser.add_argument('--paths_path', type=str, default="LRP_path/lrp_path_threshold0.9_test.pkl")
@@ -49,10 +52,13 @@ parser.add_argument('--attack', type=str, default="")
 parser.add_argument('--gpu', type=str, default="0")
 parser.add_argument('--n_clusters', type=int, default=3)
 parser.add_argument('--grids', type=int, default=1)
+parser.add_argument('--batch_size', type=int, default=32)
 parser.add_argument('--threshold', type=float, default=0.3)
 args = parser.parse_args()
 
 os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+
+from tqdm import tqdm 
 
 def mask_units(picked_samples, picked_units):
     right_count = [0.0 for i in range(args.grids)]
@@ -78,7 +84,8 @@ def mask_units(picked_samples, picked_units):
     return total-correct, total
 
 
-batch_size = 25     
+batch_size = args.batch_size
+     
 data_path = args.paths_path
 with open(data_path, 'rb') as fr:
     paths = pickle.load(fr)
@@ -89,54 +96,62 @@ if args.dataset == "mnist":
 #         transforms.Normalize((0.1307,), (0.3081,)),
     ])
     dataset = torchvision.datasets.MNIST(
-        root='~/.torch', train=args.data_train, download=True, transform=transform_test)
+        root='~/.torch/', train=args.data_train, download=True, transform=transform_test)
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=batch_size, shuffle=False)
 
-if args.dataset == "cifar10":
-    transform_test = transforms.Compose([
-            transforms.ToTensor(),
-    ])
-
-    dataset = torchvision.datasets.CIFAR10(
-            root = './data/cifar-10',
-            train = args.data_train,
-            transform = transform_test,
-            download = True)
-    data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=batch_size, shuffle=False)
-    
-if args.dataset == "imagenet":
-    if args.data_train:
-        valdir = "/mnt/dataset/Image__ILSVRC2012/ILSVRC2012_img_train/train/"
-    else:
-        valdir = "/mnt/mfs/litl/ICSE_CriticalPath/data/ILSVRC2012_img_val/"
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                 std=[0.229, 0.224, 0.225])
-    dataset = test_dataset = imagenet10Folder (
-        valdir,
-        transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            normalize,
-        ]))
-    print(len(dataset))
-    data_loader = Data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False)
-    
-if args.dataset == "SVHN":
-    transform_test = transforms.Compose([
-            transforms.ToTensor(),
-    ])
-
-    dataset = torchvision.datasets.SVHN(
-            root = './data/SVHN',
-            split="train",
-            transform = transform_test,
-            download = True)
-    data_loader = Data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False)
-    
+# if args.dataset == "cifar10":
+    # transform_test = transforms.Compose([
+            # transforms.ToTensor(),
+    # ])
+    #
+    # dataset = torchvision.datasets.CIFAR10(
+            # root = './data/cifar-10',
+            # train = args.data_train,
+            # transform = transform_test,
+            # download = True)
+    # data_loader = torch.utils.data.DataLoader(
+        # dataset, batch_size=batch_size, shuffle=False)
+        #
+# if args.dataset == "imagenet":
+    # '''
+    # this is a intranet path  
+    # for any imagenet dataset's issues, please contact us by github 
+    # '''
+    # if args.data_train:
+        # valdir = "/mnt/dataset/Image__ILSVRC2012/ILSVRC2012_img_train/train/"
+    # else:
+        # valdir = "/mnt/mfs/litl/ICSE_CriticalPath/data/ILSVRC2012_img_val/"
+    # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 # std=[0.229, 0.224, 0.225])
+    # dataset = test_dataset = imagenet10Folder (
+        # valdir,
+        # transforms.Compose([
+            # transforms.Resize((224, 224)),
+            # transforms.ToTensor(),
+            # normalize,
+        # ]))
+    # print(len(dataset))
+    # data_loader = Data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False)
+    #
+# if args.dataset == "SVHN":
+    # transform_test = transforms.Compose([
+            # transforms.ToTensor(),
+    # ])
+    #
+    # dataset = torchvision.datasets.SVHN(
+            # root = './data/SVHN',
+            # split="train",
+            # transform = transform_test,
+            # download = True)
+    # data_loader = Data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False)
+    #
     
 if args.attack != "":
+    '''
+    this is a intranet path  
+    if you are interest about the adv dataset, please contact us by github for this specifical detail.
+    '''
     data_root = '../adv_samples/adv_fgsm_mnist_mnist_samples_eps0.02.npy'
     label_root = '../adv_samples/adv_fgsm_mnist_mnist_labels_eps0.02.npy'
 
@@ -156,43 +171,46 @@ if args.attack != "":
     data_loader = Data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False)
     
 if args.dataset == "mnist":
-    ori_model = ConvnetMnist() 
-    ori_model.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
-    net = mask_ConvnetMnist() 
-    net.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+    # ori_model = ConvnetMnist() 
+    # ori_model.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+    # net = mask_ConvnetMnist() 
+    # net.load_state_dict(torch.load("trained_models/mnist_mixup_acc_99.28_ckpt.pth")["net"])
+    
+    ori_model =get_net(name="mnist")
+    net =get_masked_net(name="mnist")
 
-elif args.dataset == "cifar10" and args.arc == "convcifar10":
-    ori_model = ConvnetCifar() 
-    ori_model.load_state_dict(torch.load("trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
-    net = mask_ConvnetCifar() 
-    net.load_state_dict(torch.load("trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
-
-elif args.dataset == "cifar10"and args.arc == "vgg":
-    ori_model = VGG16(num_classes=10)
-    model_path = "./trained_models/model_vgg_cifar/vgg_seed32_dropout.pkl"
-    checkpoint = torch.load(model_path)
-    ori_model.load_state_dict(checkpoint)
-    
-    net = mask_VGG16(num_classes=10)
-    net.load_state_dict(checkpoint)
-    
-elif args.dataset == "SVHN"and args.arc == "alexnet":
-    ori_model = AlexNet(num_classes=10)
-    model_path = "./trained_models/alexnet_lr0.0001_39.pkl"
-    checkpoint = torch.load(model_path)
-    ori_model.load_state_dict(checkpoint)
-    
-    net = mask_AlexNet(num_classes=10)
-    net.load_state_dict(checkpoint)
-
-elif args.dataset == "imagenet" and args.arc == "vgg16_bn":
-    ori_model = vgg16_bn(num_classes=10)
-    model_path = "./trained_models/vgg16_bn_lr0.0001_49_imagenet_train_layer-1_withDataAugment.pkl"
-    checkpoint = torch.load(model_path)
-    ori_model.load_state_dict(checkpoint)  
-    
-    net = mask_vgg16_bn(num_classes=10)
-    net.load_state_dict(checkpoint)  
+# elif args.dataset == "cifar10" and args.arc == "convcifar10":
+    # ori_model = ConvnetCifar() 
+    # ori_model.load_state_dict(torch.load("trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
+    # net = mask_ConvnetCifar() 
+    # net.load_state_dict(torch.load("trained_models/cifar_mixup_acc_90.36_ckpt.pth")["net"])
+    #
+# elif args.dataset == "cifar10"and args.arc == "vgg":
+    # ori_model = VGG16(num_classes=10)
+    # model_path = "./trained_models/model_vgg_cifar/vgg_seed32_dropout.pkl"
+    # checkpoint = torch.load(model_path)
+    # ori_model.load_state_dict(checkpoint)
+    #
+    # net = mask_VGG16(num_classes=10)
+    # net.load_state_dict(checkpoint)
+    #
+# elif args.dataset == "SVHN"and args.arc == "alexnet":
+    # ori_model = AlexNet(num_classes=10)
+    # model_path = "./trained_models/alexnet_lr0.0001_39.pkl"
+    # checkpoint = torch.load(model_path)
+    # ori_model.load_state_dict(checkpoint)
+    #
+    # net = mask_AlexNet(num_classes=10)
+    # net.load_state_dict(checkpoint)
+    #
+# elif args.dataset == "imagenet" and args.arc == "vgg16_bn":
+    # ori_model = vgg16_bn(num_classes=10)
+    # model_path = "./trained_models/vgg16_bn_lr0.0001_49_imagenet_train_layer-1_withDataAugment.pkl"
+    # checkpoint = torch.load(model_path)
+    # ori_model.load_state_dict(checkpoint)  
+    #
+    # net = mask_vgg16_bn(num_classes=10)
+    # net.load_state_dict(checkpoint)  
 
 ori_model = ori_model.cuda()
 ori_model.eval()
@@ -232,10 +250,10 @@ if os.path.exists(samples_class_file):
         right_samples_class = unpickler.load()
 else: 
     start_index = end_index = 0
-    for step, (val_x, val_y) in enumerate(data_loader):
+    for step, (val_x, val_y) in tqdm(enumerate(data_loader),total=len(data_loader)):
         val_x = val_x.cuda()
         start_index = end_index
-        print("step:", step)
+        # print("step:", step)
         val_y = val_y
         val_output = ori_model(val_x)
         _, val_pred_y = val_output.max(1)
@@ -263,28 +281,28 @@ samples_class = right_samples_class
 # for index in range(len(dataset)):
 #     samples_class[dataset[index][1]].append(index)
 
-for i, j in zip(samples_class, right_samples_class):
-    print(len(i), len(j))
+# for i, j in zip(samples_class, right_samples_class):
+    # print(len(i), len(j))
     
     
-for c in range(10):
-    for i in samples_class[c]:
+for c in tqdm(range(10),desc="assign value to paths_class",total=10):
+    for i in tqdm(samples_class[c],leave=False):
         paths_class[c].append(paths[i])
         
-for cl in range(10):
-    for p in paths_class[cl]:
+for cl in tqdm(range(10),desc="flatten_paths",total=10):
+    for p in tqdm(paths_class[cl],leave=False):
         u = []
-        for layer, layer_units in enumerate(p):  
+        for layer, layer_units in tqdm(enumerate(p) ,leave=False):  
             u.extend(layer_units)
             pad = [-1 for _ in range(feature_size[layer]-len(layer_units))]
             u.extend(pad)
 #             print(len(u))
         flatten_paths[cl].append(u)
     
-for cl in range(10):
-    for p in paths_class[cl]:  
+for cl in tqdm(range(10),desc="binary_paths",total=10):
+    for p in tqdm(paths_class[cl],leave=False):  
         u = []
-        for layer, layer_units in enumerate(p):  
+        for layer, layer_units in tqdm(enumerate(p),leave=False):  
             tmp = [0 for _ in range(feature_size[layer])]
             for k in layer_units:
                 tmp[k] = 1
@@ -300,7 +318,7 @@ right_num = 0
 counts = np.array([0.0 for _ in range(3)])
 probs = np.array([0.0 for _ in range(3)])
 
-for cla in range(10):
+for cla in tqdm(range(10),desc="cluste each class", total=10):
     
     num_layers = len(feature_size)
     
@@ -315,7 +333,7 @@ for cla in range(10):
 
     cluster_acc = []
 
-    for cluster in range(args.n_clusters):
+    for cluster in tqdm(range(args.n_clusters),total=args.n_clusters,leave=False):
         print("cluster:", cluster)
         
         if not args.useOldCluster:
@@ -425,16 +443,16 @@ for cla in range(10):
             for i in rest_units:
                 lens_rest.append(len(i))
 
-            print("mask picked")
-            print(lens)
+            # print("mask picked")
+            # print(lens)
             picked_count, right_num_cluster = mask_units(picked_samples, picked_units_girds)
 
-            print("mask rest")
-            print(lens_rest)
+            # print("mask rest")
+            # print(lens_rest)
             rest_count, _ = mask_units(picked_samples, rest_units)
 
 
-            print("picked_{} vs rest_{}".format(picked_count, rest_count))
+            # print("picked_{} vs rest_{}".format(picked_count, rest_count))
     #         print("mask sec")
     #         sec_count, sec_prob, _ = mask_units(picked_samples, sec_picked_units)
     #         print("result:", picked_count, acc)
