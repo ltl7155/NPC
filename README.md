@@ -30,6 +30,14 @@ We can run cluster_three_level_mask.py to cluster theses paths and derive the ab
 
 `python cluster_three_level_mask.py --paths_path ./data/LRP_path/mnist_convmnist_lrp_path_threshold0.8_train.pkl --arc convmnist --b_cluster --dataset mnist --gpu 1 --n_clusters 4 --threshold 0.8 --grids 5 --data_train`
 
+`python cluster_three_level_mask.py --paths_path LRP_path/cifar10_convcifar10_lrp_path_threshold0.7_train.pkl --arc convcifar10 --b_cluster --dataset cifar10 --gpu 1 --n_clusters 7 --threshold 0.9 --grids 5 --data_train`
+
+`python cluster_three_level_mask.py --paths_path LRP_path/cifar10_vgg_lrp_path_threshold0.9_train.pkl --arc vgg --b_cluster --dataset cifar10 --gpu 1 --n_clusters 7 --threshold 0.9 --grids 5 --data_train`
+
+`python cluster_three_level_mask.py --paths_path LRP_path/SVHN_alexnet_lrp_path_threshold0.7_train.pkl --arc alexnet --b_cluster --dataset SVHN --gpu 1 --n_clusters 4 --threshold 0.6 --grids 5 --data_train`
+
+`python cluster_three_level_mask.py --paths_path LRP_path/imagenet_vgg16_bn_lrp_path_threshold0.7_train.pkl --arc vgg16_bn --b_cluster --dataset imagenet --gpu 1 --n_clusters 4 --threshold 0.7 --grids 5 --data_train`
+
 ### RQ3 SNPC,LSA,DSA,ANPC
 In calc_NPC.py, we inplemented the SNPC. And in calc_sadl, we can run new_run_torch.py to get the LSA,DSA,ANPC metric.
 </br>
