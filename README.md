@@ -6,6 +6,7 @@
 ### Derive LRP path.
 first, please download some pretrained weight, data and seed case from drive.google.com by our scripts. </br>
 or if your do want to reproduce instead of downloading, please refer to the [full_version.md](./fullversion.md)
+More data will be released in future.
 
 * download MNIST's model's weight (4.7 Mb), MNIST dataset (53 Mb), one seed-case (36Mb)</br>
 
@@ -43,7 +44,8 @@ In calc_NPC.py, we inplemented the SNPC. And in calc_sadl, we can run new_run_to
 </br>
 * ANPC</br>
 `batch_size=64  python new_run_torch.py -nma ` </br>
-* LSA(LSC) DSA(DSC) </br>
-`batch_size=64  python new_run_torch.py -lsa -dsa  --last_layer`</br>
 * SNPC </br>
 `batch_size=64  python calc_SNPC.py `</br>
+* LSA(LSC) DSA(DSC) </br>
+`batch_size=64  python new_run_torch.py -lsa -dsa  --last_layer`</br>
+
