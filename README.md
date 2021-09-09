@@ -16,9 +16,13 @@ or if your do want to reproduce instead of downloading, please refer to the [ful
 We can run mask_critical_units.py to get inconsistency rate after masking neurons in CDP and NCDP.
 
 `python mask_critical_units.py --paths_path ./data/LRP_path/mnist_convmnist_lrp_path_threshold0.8_train.pkl --data_train --dataset mnist --arc convmnist`
+
 `python mask_critical_units.py --paths_path ./data/LRP_path/cifar10_convcifar10_lrp_path_threshold0.7_train.pkl --data_train --dataset cifar10 --arc convcifar10`
+
 `python mask_critical_units.py --paths_path ./data/LRP_path/cifar10_vgg_lrp_path_threshold0.9_train.pkl --data_train --dataset cifar10 --arc vgg`
+
 `python mask_critical_units.py --paths_path ./data/LRP_path/SVHN_alexnet_lrp_path_threshold0.7_train.pkl --data_train --dataset SVHN --arc alexnet`
+
 `python mask_critical_units.py --paths_path ./data/LRP_path/imagenet_vgg16_bn_lrp_path_threshold0.7_train.pkl --data_train --dataset imagenet --arc vgg16_bn`
 
 ### RQ2 Cluster.
