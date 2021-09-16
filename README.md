@@ -1,8 +1,12 @@
 
+
+
 ### Overview of NPC  :
 ![image](https://user-images.githubusercontent.com/26337247/118444619-f491d800-b71f-11eb-8947-a7deb62db2da.png)
 
+### Parameters:
 
+In  our  paper,  the  value  ranges  of  the  three  hyperparameters α, βand k are {0.7,0.8,0.9,1.0}, {0.6,0.7,0.8,0.9} and {1,4,7}, respectively.
 ### Derive LRP path.
 first, please download some pretrained weight, data and seed case from drive.google.com by our scripts. </br>
 or if your do want to reproduce instead of downloading, please refer to the [full_version.md](./fullversion.md)
