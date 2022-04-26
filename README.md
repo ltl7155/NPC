@@ -9,7 +9,7 @@
 In  our  paper,  the  value  ranges  of  the  three  hyperparameters α, β and k are {0.7,0.8,0.9,1.0}, {0.6,0.7,0.8,0.9} and {1,4,7}, respectively.
 ### Derive LRP path.
 first, please download some pretrained weight, data and seed case from drive.google.com by our scripts. </br>
-or if your do want to reproduce instead of downloading, please refer to the [full_version.md](./fullversion.md)
+<!-- or if your do want to reproduce instead of downloading, please refer to the [full_version.md](./fullversion.md) -->
 More data will be released in future.
 
 * download MNIST's model's weight (4.7 Mb), MNIST dataset (53 Mb), one seed-case (36Mb)</br>
