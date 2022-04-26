@@ -53,3 +53,15 @@ In calc_NPC.py, we inplemented the SNPC. And in calc_sadl, we can run new_run_to
 * LSA(LSC) DSA(DSC) </br>
 `batch_size=64  python new_run_torch.py -lsa -dsa  --last_layer`</br>
 
+
+## Citation
+
+```bibtex
+@article{xie2022npc,
+  title={NPC: N euron P ath C overage via Characterizing Decision Logic of Deep Neural Networks},
+  author={Xie, Xiaofei and Li, Tianlin and Wang, Jian and Ma, Lei and Guo, Qing and Juefei-Xu, Felix and Liu, Yang},
+  journal={ACM Transactions on Software Engineering and Methodology},
+  year={2022},
+  publisher={ACM New York, NY}
+}
+```
